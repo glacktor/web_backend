@@ -1,0 +1,55 @@
+{% extends "layouts/base.html" %}
+{%load static%}
+
+{% block content %}
+
+<div class="row mt-3">
+    <div class="col-2"></div>
+    <div class="col-8 d-flex justify-content-between align-items-center">
+        <div class="input-group mb-3">
+            <form class="d-flex" method="GET" action="{% url 'index' %}" role="search">
+                <input class="form-control me-2" type="search" name="job" placeholder="Введите название" style="width: 250px; height: 40px" value="{{ query|default:'' }}">
+                <button type="submit" class="btn btn-search btn-fix ps-0" style="height: 30px">
+                    <img src="{% static 'img/search.svg' %}" height="40px" width="30px">
+                </button>
+            </form>
+            <div class="position-relative ms-4" style="width: 40px;">
+                <a href="{% url "rezume" rezume %}"><img src="{% static "img/plus1.svg" %}" width="40px"></a>
+                <span class="badge basket-badge position-absolute top-0 start-100 translate-down">
+                    {{ count }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="border: 3px solid black; margin-left: 200px; margin-right: 200px;">
+<div class="row mt-3">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="row">
+        {% for job in jobs %}
+            <div class="col-md-4 mb-4 d-flex">
+                <div class="card mb-3">
+                    <div>
+                        <img src="{{ job.photo }}" class="img-fluid rounded-start" style="width: 100%; height: 250px; object-fit: cover;" alt="...">
+                    </div>
+                    <div>
+                        <div class="card-body">
+                        <a href="{% url "job" job.id%}" style="color: black; text-decoration: none"><h3 class="card-title">{{ job.name }}</h3></a>
+                        <div class="card-text text-description">
+                            <h5>Зарплата: {{ job.salary }} р/месяц</h5>
+                            <h5>Работадатель: {{ job.employer }}</h5>
+                            <h5>Город: {{ job.city }}</h5>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

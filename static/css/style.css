@@ -1,0 +1,59 @@
+
+body {
+    background-color: #EEF4F8;
+    color: #000;
+}
+
+/* Цвет фона для шапки */
+.header {
+    background-color: #FFFFFF;
+}
+
+
+/* Цвет фона для остальной части */
+.body-content {
+    background-color: #F5F5F5;
+}
+
+.navbar-rule {
+    background-color: transparent;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.text-description {
+    text-align: justify;
+}
+
+.btn-fix {
+    padding: 0 0 0 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.job-photo {
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+}
+
+.job-description {
+    font-size: 20px;
+}
+
+.add-btn {
+    border-radius: 10px;
+    width: 150px;
+}
+
+.del-btn {
+    border-radius: 10px;
+    width: 350px;
+    height: 45px;
+    background-color: red;
+    color: white;
+    font-size: 20px;
+}
+
+
+

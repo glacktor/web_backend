@@ -1,0 +1,45 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <hr style="border: 3px solid black; margin-left: 200px; margin-right: 200px;">
+
+<div class="container mt-2">
+    <div class="row justify-content-center mb-4">
+        <div class="col-8 text-center">
+            <h2>Добавленные вакансии</h2>
+            <input type="text" class="form-control" id="description" value="{{ description }}">
+        </div>
+    </div>
+
+    <div class="row">
+        {% for job in liked_jobs %}
+        <div class="col-2"></div>
+        <div class="col-4">
+            <div class="d-flex">
+                <div class="card mb-3" style="width: 100%;"> <!-- Устанавливаем ширину карточки -->
+                    <img src="{{ job.photo }}" class="img-fluid rounded-start" style="width: 100%; height: 250px; object-fit: cover;" alt="..."> <!-- Устанавливаем object-fit для изображения -->
+                    <div>
+                        <div class="card-body">
+                        <h3 class="card-title">{{ job.name }}</h3></a>
+                        <div class="card-text text-description">
+                            <h5>Зарплата: {{ job.salary }} р/месяц</h5>
+                            <h5>Работадатель: {{ job.employer }}</h5>
+                            <h5>Город: {{ job.city }}</h5>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 mt-5">
+            <h2>Работодатель</h2>
+            <input type="text" class="form-control" id="employers" value="{{ employers|index:job.id }}">
+        </div>
+        <div class="col-2"></div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

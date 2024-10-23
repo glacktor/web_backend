@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<hr style="border: 3px solid black; margin-left: 200px; margin-right: 200px;">
+
+<div id="{{ job.id }}" class="row" style="margin-top: 40px;">
+    <div class="col-2"></div>
+
+    <div class="col-4 pt-5">
+        <img class="job-photo" src="{{ job.photo }}">
+    </div>
+
+    <div class="col-4 grid row-gap-3">
+        <div class="pt-2 pb-2">
+            <h1>{{ job.name }}</h1>
+            <h4>Зарплата: {{ job.salary }} р/месяц</h4>
+            <h4>Работадатель: {{ job.employer }}</h4>
+            <h4>Город: {{ job.city }}</h4>
+        </div>
+        <div class="mb-5" style="text-align: justify">
+            <p class="job-description">{{ job.description }}</p>
+        </div>
+    </div>
+
+    <div class="col-2"></div>
+</div>
+
+{% endblock %}
