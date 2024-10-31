@@ -44,7 +44,7 @@ def rezume(request, rezume_id):
         context = {
             'description': rezume_data['description'],
             'liked_jobs': liked_jobs,
-            'employers': rezume_data['employers'],
+            'experience': rezume_data['experience'],
         }
 
         return render(request, 'rezume.html', context)

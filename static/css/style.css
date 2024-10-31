@@ -55,5 +55,17 @@ body {
     font-size: 20px;
 }
 
+.basket-badge {
+    background-color: white;
+    color: black;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    padding: 0;
+}
 
 
