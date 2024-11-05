@@ -41,5 +41,17 @@
         {% endfor %}
     </div>
 
+    <div class="row justify-content-center mb-4">
+        <div class="col-8 text-center">
+            <h2>Резюме описание???</h2>
+            <textarea class="form-control" id="rezume-description" rows="5">{{ description }}</textarea>
+        </div>
+    </div>
+
+        <form method="POST" action="{% url "delete_rezume" rezume.id %}" class="row justify-content-center mb-4">
+            {% csrf_token %}
+            <button class="del-btn">Удалить резюме</button>
+        </form>
+
 </div>
 {% endblock %}

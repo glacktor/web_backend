@@ -41,6 +41,10 @@
                             <h5>Работадатель: {{ job.employer }}</h5>
                             <h5>Город: {{ job.city }}</h5>
                         </div>
+                        <form method="POST" action="{% url 'add_job_to_rezume' job.id %}">
+                            {% csrf_token %}
+                            <button class="add-btn">Добавить</button>
+                        </form>
                         </div>
                     </div>
                 </div>

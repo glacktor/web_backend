@@ -23,5 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
     path('jobs/<int:job_id>', views.job, name="job"),
-    path('rezume/<int:rezume_id>', views.rezume, name="rezume")
+    path('rezume/<int:rezume_id>', views.rezume, name="rezume"),
+    path('add-to-rezume/<int:rezume_id>', views.add_job_to_rezume, name="add_job_to_rezume"),
+    path('delete-rezume/<int:rezume_id>', views.delete_rezume, name="delete_rezume")
+
 ]
