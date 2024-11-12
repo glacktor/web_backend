@@ -1,8 +1,7 @@
 {% extends "layouts/base.html" %}
-{%load static%}
+{% load static %}
 
 {% block content %}
-
 <div class="row mt-3">
     <div class="col-2"></div>
     <div class="col-8 d-flex justify-content-between align-items-center">
@@ -14,10 +13,17 @@
                 </button>
             </form>
             <div class="position-relative ms-4" style="width: 40px;">
-                <a href="{% url "rezume" rezume %}"><img src="{% static "img/plus1.svg" %}" width="40px"></a>
-                <span class="badge basket-badge position-absolute top-0 start-100 translate-down">
-                    {{ count }}
-                </span>
+                {% if rezume %}
+                    <a href="{% url 'rezume' rezume.id %}"><img src="{% static 'img/plus1.svg' %}" width="40px"></a>
+                    <span class="badge basket-badge position-absolute top-0 start-100 translate-down">
+                        {{ count }}
+                    </span>
+                {% else %}
+                    <a href="#"><img src="{% static 'img/plus1.svg' %}" width="40px"></a>
+                    <span class="badge basket-badge position-absolute top-0 start-100 translate-down">
+                        0
+                    </span>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -35,16 +41,18 @@
                     </div>
                     <div>
                         <div class="card-body">
-                        <a href="{% url "job" job.id%}" style="color: black; text-decoration: none"><h3 class="card-title">{{ job.name }}</h3></a>
+                        <a href="{% url 'job' job.id %}" style="color: black; text-decoration: none"><h3 class="card-title">{{ job.name }}</h3></a>
                         <div class="card-text text-description">
                             <h5>Зарплата: {{ job.salary }} р/месяц</h5>
-                            <h5>Работадатель: {{ job.employer }}</h5>
+                            <h5>Работодатель: {{ job.employer }}</h5>
                             <h5>Город: {{ job.city }}</h5>
                         </div>
+                            
                         <form method="POST" action="{% url 'add_job_to_rezume' job.id %}">
                             {% csrf_token %}
                             <button class="add-btn">Добавить</button>
                         </form>
+                            
                         </div>
                     </div>
                 </div>
@@ -53,7 +61,4 @@
         </div>
     </div>
 </div>
-
-
-
 {% endblock %}

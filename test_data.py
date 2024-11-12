@@ -40,6 +40,7 @@ JOBS = [
         'photo': 'http://localhost:9000/mybucket/rabota/taxi.jpg'
     }
 
+
 ]
 
 REZUME_DATA = [

@@ -31,7 +31,7 @@ class RezumeManager(models.Manager):
         return self.get(id=rezume_id)
 
     def get_total_jobs(self, rezume):
-        return RezumeJob.objects.filter(fight=rezume).count()
+        return RezumeJob.objects.filter(rezume=rezume).count()
 
 
 class Rezume(models.Model):
@@ -58,13 +58,13 @@ class Rezume(models.Model):
     objects = RezumeManager()
 
     def __str__(self):
-        return self.description
+        return str(self.id)
 
 
 class RezumeJob(models.Model):
     rezume = models.ForeignKey(Rezume, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
-    experience = models.IntegerField()
+    experience = models.IntegerField(null=True, blank=True)
 
     class Meta:
         constraints = [

@@ -84,7 +84,7 @@ DATABASES = {
         'USER': 'username',
         'PASSWORD': 'qwe123',
         'HOST': 'localhost',
-        'PORT': 7782, # Стандартный порт PostgreSQL
+        'PORT': 7782,# Стандартный порт PostgreSQL
     }
 }
 

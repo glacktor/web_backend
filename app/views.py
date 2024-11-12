@@ -12,6 +12,12 @@ def add_job_to_rezume(request, job_id):
     except Rezume.DoesNotExist:
         rezume = Rezume.objects.create(creator=user, status='dr')
 
+    """"# Находим первое резюме пользователя со статусом 'dr' или создаем новое
+    rezume = Rezume.objects.filter(creator=user, status='dr').first()
+    if rezume is None:
+        rezume = Rezume.objects.create(creator=user, status='dr')"""
+
+    # Добавляем работу только если её ещё нет в этом резюме
     rezume_job, created = RezumeJob.objects.get_or_create(rezume=rezume, job=job)
     rezume_job.save()
 
@@ -23,6 +29,7 @@ def delete_rezume(request, rezume_id):
         cursor.execute("UPDATE app_rezume SET status = 'del' WHERE id = %s", [rezume_id])
 
     return redirect('index')
+    pass
 
 
 def index(request):
@@ -42,6 +49,7 @@ def index(request):
     if job_name:
         jobs = Job.objects.filter(job_name__icontains=job_name)
         return render(request, 'index.html', {
+            "count": Rezume.objects.get_total_jobs(curr_rezume),
             "jobs": jobs,
             'query': job_name,
             "rezume": rezume_info
@@ -66,18 +74,21 @@ def rezume(request, rezume_id):
 
     rezume_data = get_object_or_404(Rezume, id=rezume_id)
 
-    liked_jobs = Job.objects.filter(likedjob__liked=rezume_data)
+    liked_jobs = Job.objects.filter(rezumejob__rezume=rezume_data)
 
-    experience = {}
-    for rezume_job in RezumeJob.objects.filter(rezume=rezume_data):
-        experience[rezume_job.job.id] = rezume_job.experience
+    # experience = {}
+    # for rezume_job in RezumeJob.objects.filter(rezume=rezume_data):
+    #     experience[rezume_job.job.id] = rezume_job.experience
+
+    experience = {rezume_job.job.id: rezume_job.experience for rezume_job in
+                  RezumeJob.objects.filter(rezume=rezume_data)}
 
     context = {
         'rezume': rezume_data,
         #'battle_name': rezume_data.fight_name,
         'liked_jobs': liked_jobs,
         'experience': experience,
-        'rezume_description': rezume_data.description
+        'description': rezume_data.description
     }
 
     return render(request, 'rezume.html', context)
