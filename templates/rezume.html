@@ -6,6 +6,7 @@
     <hr style="border: 3px solid black; margin-left: 200px; margin-right: 200px;">
 
 <div class="container mt-2">
+    {% if rezume %}
     <div class="row justify-content-center mb-4">
         <div class="col-8 text-center">
             <h2>Добавленные вакансии</h2>
@@ -41,7 +42,6 @@
         {% endfor %}
     </div>
 
-    {% if rezume %}
         <form method="POST" action="{% url 'delete_rezume' rezume.id %}" class="row justify-content-center mb-4">
             {% csrf_token %}
             <button class="del-btn">Удалить резюме</button>

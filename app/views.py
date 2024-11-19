@@ -47,7 +47,7 @@ def index(request):
         rezume_info = None
 
     if job_name:
-        jobs = Job.objects.filter(job_name__icontains=job_name)
+        jobs = Job.objects.filter(name__icontains=job_name)
         return render(request, 'index.html', {
             "count": Rezume.objects.get_total_jobs(curr_rezume),
             "jobs": jobs,
@@ -56,7 +56,7 @@ def index(request):
         })
     else:
         jobs = Job.objects.all()
-        return render(request, 'index.html', {"jobs": jobs, "rezume": rezume_info})
+        return render(request, 'index.html', {"count": Rezume.objects.get_total_jobs(curr_rezume), "jobs": jobs, "rezume": rezume_info})
 
 
 def job(request, job_id):
