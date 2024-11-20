@@ -33,7 +33,7 @@ class UserSingleton:
 
 def process_file_upload(file_object: InMemoryUploadedFile, client, image_name):
     try:
-        client.put_object('navy-sea', image_name, file_object, file_object.size)
+        client.put_object('navy-sea', image_name, file_object, file_object.size)#semenfixисправить mamochki
         return f"http://localhost:9000/mybucket/rabota/{image_name}"
     except Exception as e:
         return {"error": str(e)}
@@ -136,7 +136,7 @@ class JobDetail(APIView):
             )
             old_img_name = job.photo.split('/')[-1]
             try:
-                client.remove_object('navy-sea', old_img_name)#семенsemenисправитьfix
+                client.remove_object('navy-sea', old_img_name)#семенsemenисправитьfix mamochki
             except Exception as e:
                 return Response({"error": f"Ошибка при удалении старого изображения: {str(e)}"},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -167,7 +167,7 @@ class JobDetail(APIView):
             draft_rezume.save()
 
         if RezumeJob.objects.filter(rezume=draft_rezume, job=job).exists():
-            return Response(data={"error": "Корабль уже добавлен в черновик."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"error": "Работа уже добавлена в черновик."}, status=status.HTTP_400_BAD_REQUEST)
 
         RezumeJob.objects.create(rezume=draft_rezume, job=job)
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -191,7 +191,7 @@ class JobDetail(APIView):
             )
             image_name = job.photo.split('/')[-1]
             try:
-                client.remove_object('navy-sea', image_name)#семенsemenисправитьfix
+                client.remove_object('navy-sea', image_name)#семенsemenисправитьfix mamochki
             except Exception as e:
                 return Response({"error": f"Ошибка при удалении изображения: {str(e)}"},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
