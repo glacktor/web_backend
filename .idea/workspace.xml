@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4536eb3-8004-4cbb-b974-013fe116be28" name="Changes" comment="lab2 first commit">
-      <change afterPath="$PROJECT_DIR$/mamochki/app/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mamochki/app/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mamochki/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/mamochki/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mamochki/mamochki/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/mamochki/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mamochki/mamochki/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/stocks/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/mamochki/app/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/stocks/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/stocks/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/mamochki/app/apps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/stocks/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/mamochki/app/migrations/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/stocks/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/stocks/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/mamochki/app/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamochki/stocks/views.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +84,7 @@
       <workItem from="1731420113629" duration="7427000" />
       <workItem from="1731493852367" duration="905000" />
       <workItem from="1731498407877" duration="5242000" />
+      <workItem from="1732059972138" duration="8227000" />
     </task>
     <task id="LOCAL-00001" summary="lab1 fix">
       <option name="closed" value="true" />
