@@ -33,7 +33,7 @@ urlpatterns = [
     path('rezumes/<int:pk>/form/', RezumeDetail.as_view(), name='rezume-detail-form'),
     path('rezumes/<int:pk>/complete/', RezumeDetail.as_view(), name='rezume-detail-complete'),
     path('rezumes/<int:pk>/', RezumeDetail.as_view(), name='rezume-detail'),
-    path('fights/<int:rezume_id>/jobs/<int:job_id>/', RezumeJobDetail.as_view(), name='rezume-job-detail'),
+    path('rezumes/<int:rezume_id>/jobs/<int:job_id>/', RezumeJobDetail.as_view(), name='rezume-job-detail'),
     path('users/<str:action>/', UserView.as_view(), name='user-action'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),

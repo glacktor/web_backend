@@ -350,7 +350,7 @@ class RezumeDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# View для RezumeJob (кораблей в сражениях)
+# View для RezumeJob (вакансий в резюме)
 class RezumeJobDetail(APIView):
     model_class = RezumeJob
     serializer_class = RezumeJobSerializer
@@ -366,10 +366,12 @@ class RezumeJobDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, rezume_id, job_id, format=None):
+        print('jaa')
         rezume = get_object_or_404(Rezume, pk=rezume_id)
         rezume_job = get_object_or_404(self.model_class, rezume=rezume, job__id=job_id)
+        print(rezume_job)
         rezume_job.delete()
-        return Response({"message": "Корабль успешно удален из сражения"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Вакансия успешно удалена из резюме"}, status=status.HTTP_204_NO_CONTENT)
 
 
 # View для User (пользователей)
