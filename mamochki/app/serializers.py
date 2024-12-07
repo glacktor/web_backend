@@ -20,7 +20,6 @@ class JobSerializer(serializers.ModelSerializer):
     def get_fields(self):
         fields = super().get_fields()
 
-        # Если это запрос сражения, отображаем только ship_name и photo
         if self.context.get('is_fight', False):
             return {
                 'job_name': fields['job_name'],
@@ -51,7 +50,6 @@ class RezumeSerializer(serializers.ModelSerializer):
         exclude_jobs = kwargs.pop('exclude_jobs', False)
         super(RezumeSerializer, self).__init__(*args, **kwargs)
 
-        # Убираем поле 'ships' если exclude_ships=True
         if exclude_jobs:
             self.fields.pop('jobs', None)
 
