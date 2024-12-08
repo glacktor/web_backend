@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Job, Rezume, RezumeJob
+from .models import Job, Rezume, RezumeJob, CustomUser
 
 
 class JobSerializer(serializers.ModelSerializer):
@@ -55,6 +55,8 @@ class RezumeSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_staff = serializers.BooleanField(default=False, required=False)
+    is_superuser = serializers.BooleanField(default=False, required=False)
     class Meta:
-        model = User
-        fields = ['id', 'username', 'email']
+        model = CustomUser
+        fields = ['email', 'password', 'is_staff', 'is_superuser']

@@ -16,9 +16,25 @@ Including another URLconf
 """
 from django.contrib import admin
 # from mamochki.app import views
-from app.views import JobList, JobDetail,RezumeList,RezumeDetail,RezumeJobDetail,UserView
+from app.views import JobList, JobDetail,RezumeList,RezumeDetail,RezumeJobDetail,UserViewSet,login_view,logout_view
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Snippets API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 
 router = routers.DefaultRouter()
 
@@ -34,7 +50,11 @@ urlpatterns = [
     path('rezumes/<int:pk>/complete/', RezumeDetail.as_view(), name='rezume-detail-complete'),
     path('rezumes/<int:pk>/', RezumeDetail.as_view(), name='rezume-detail'),
     path('rezumes/<int:rezume_id>/jobs/<int:job_id>/', RezumeJobDetail.as_view(), name='rezume-job-detail'),
-    path('users/<str:action>/', UserView.as_view(), name='user-action'),
+    path('login/',  login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('users/auth/', UserViewSet.as_view({'post': 'create'}), name='user-register'),
+    path('users/profile/', UserViewSet.as_view({'put': 'profile'}), name='user-profile'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
