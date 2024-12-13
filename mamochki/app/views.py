@@ -142,7 +142,7 @@ class JobDetail(APIView):
             )
             old_img_name = job.photo.split('/')[-1]
             try:
-                client.remove_object('navy-sea', old_img_name)#семенsemenисправитьfix mamochki
+                client.remove_object('mubucket', old_img_name)#семенsemenисправитьfix mamochki
             except Exception as e:
                 return Response({"error": f"Ошибка при удалении старого изображения: {str(e)}"},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -102,7 +102,7 @@ class Rezume(models.Model):
 class RezumeJob(models.Model):
     rezume = models.ForeignKey(Rezume, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
-    experience = models.IntegerField(null=True)
+    experience = models.IntegerField(null=True, default=0)
 
     class Meta:
         constraints = [
