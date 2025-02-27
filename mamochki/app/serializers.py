@@ -6,7 +6,7 @@ from .models import Job, Rezume, RezumeJob, CustomUser
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
-        fields = ['id', 'name', 'description', 'salary', 'city', 'employer', 'status', 'photo']#семенsemenисправитьfix
+        fields = ['id', 'name', 'description', 'salary', 'city', 'employer', 'status', 'photo']
 
     def __init__(self, *args, **kwargs):
         # Получаем контекст запроса

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -170,6 +171,10 @@ CACHES = {
     }
 }
 
+GRAPHENE = {
+    'SCHEMA': 'mamochki.schema.schema',
+}
+
 SESSION_COOKIE_AGE = 1209600
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3000",
@@ -182,7 +187,9 @@ CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
     'https://localhost:5173',
+    'https://127.0.0.1:5173'
 ]
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
-
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
