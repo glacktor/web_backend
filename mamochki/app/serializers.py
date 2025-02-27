@@ -22,8 +22,9 @@ class JobSerializer(serializers.ModelSerializer):
 
         if self.context.get('is_fight', False):
             return {
-                'job_name': fields['job_name'],
-                'photo': fields['photo']
+                'name': fields['name'],
+                'photo': fields['photo'],
+                'salary': fields['salary']
             }
 
         return fields
@@ -42,8 +43,8 @@ class RezumeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rezume
-        fields = ['id', 'description', 'review', 'status', 'created_at', 'formed_at', 'completed_at', 'creator',
-                  'moderator', 'jobs']#семенsemenисправитьfix
+        fields = ['id', 'description', 'review', 'qr', 'status', 'created_at', 'formed_at', 'completed_at', 'creator',
+                  'moderator', 'jobs']
 
     def __init__(self, *args, **kwargs):
         # Получаем контекст из сериализатора

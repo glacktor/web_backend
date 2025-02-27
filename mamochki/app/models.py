@@ -85,6 +85,7 @@ class Rezume(models.Model):
     status = models.CharField(choices=STATUS_CHOICES, max_length=9, default='dr')
     created_at = models.DateTimeField(auto_now_add=True)
     formed_at = models.DateTimeField(null=True, blank=True)
+    qr = models.TextField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
     creator = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='created_rezumes')
     moderator = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='moderated_rezumes')

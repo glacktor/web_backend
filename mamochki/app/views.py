@@ -23,6 +23,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, action
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
+from .services.qr_generate import generate_rezume_qr
 
 def get_csrf_token(request):
     return JsonResponse({'csrfToken': get_token(request)})
@@ -385,8 +386,12 @@ class RezumeDetail(APIView):
                                     status=status.HTTP_403_FORBIDDEN)
 
                 if status_value == 'c':
+                    real_time = timezone.now()
                     rezume.completed_at = timezone.now()
                     updated_data = request.data.copy()
+                    rezume_jobs = rezume.rezumejob_set.all()
+                    qr_code_base64 = generate_rezume_qr(rezume, rezume_jobs, real_time)
+                    updated_data['qr'] = qr_code_base64
 
                 serializer = self.serializer_class(rezume, data=updated_data, partial=True)
                 if serializer.is_valid():
