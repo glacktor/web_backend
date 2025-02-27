@@ -42,7 +42,7 @@ class RezumeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rezume
-        fields = ['id', 'description', 'status', 'created_at', 'formed_at', 'completed_at', 'creator',
+        fields = ['id', 'description', 'review', 'status', 'created_at', 'formed_at', 'completed_at', 'creator',
                   'moderator', 'jobs']#семенsemenисправитьfix
 
     def __init__(self, *args, **kwargs):

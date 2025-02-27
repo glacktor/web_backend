@@ -16,11 +16,16 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
-from app.permissions import *
+from .permissions import *
 import redis
 import uuid
 from django.http import HttpResponse
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, action
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
+
+def get_csrf_token(request):
+    return JsonResponse({'csrfToken': get_token(request)})
 
 session_storage = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
@@ -80,7 +85,7 @@ class JobList(APIView):
                 draft_rezume_id = draft_rezume.id
                 count = RezumeJob.objects.filter(rezume=draft_rezume).count()
 
-        # serializer = self.serializer_class(ships, many=True)
+        # serializer = self.serializer_class(jobs, many=True)
         serializer = self.serializer_class(jobs, many=True, context={'is_list': True})
         response_data = {
             'jobs': serializer.data,
@@ -118,6 +123,7 @@ class JobDetail(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
+        print(1)
         if request.path.endswith('/image/'):
             return self.update_image(request, pk)
         elif request.path.endswith('/draft/'):
@@ -158,13 +164,21 @@ class JobDetail(APIView):
 
     @swagger_auto_schema(request_body=serializer_class)
     def add_to_draft(self, request, pk):
+        ssid = request.COOKIES.get("session_id")
+        print(f"Session ID: {ssid}, Exists in Redis: {session_storage.exists(ssid)}")
+        if ssid and session_storage.exists(ssid):
+            email = session_storage.get(ssid).decode("utf-8")
+            print(f"Email found in session: {email}")
+            request.user = CustomUser.objects.get(email=email)
+        else:
+            print("No valid session found.")
+            request.user = None
         user = request.user
         if not user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         job = get_object_or_404(self.model_class, pk=pk)
         draft_rezume = Rezume.objects.filter(creator=user, status='dr').first()
-
         if not draft_rezume:
             draft_rezume = Rezume.objects.create(
                 creator=user,
@@ -218,6 +232,14 @@ class RezumeList(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
+        ssid = request.COOKIES.get("session_id")
+        if ssid and session_storage.exists(ssid):
+            email = session_storage.get(ssid).decode("utf-8")
+            print(f"Email found in session: {email}")
+            request.user = CustomUser.objects.get(email=email)
+        else:
+            print("No valid session found.")
+            request.user = None
         user = request.user
         date_from = request.query_params.get('date_from')
         date_to = request.query_params.get('date_to')
@@ -283,9 +305,23 @@ class RezumeDetail(APIView):
 
     def get(self, request, pk, format=None):
         rezume = get_object_or_404(self.model_class, pk=pk)
-        if rezume.status == 'del':
-            return Response({"detail": "Эта заявка удалена и недоступна для просмотра."}, status=403)
-        # serializer = self.serializer_class(rezume)
+        ssid = request.COOKIES.get("session_id")
+        if ssid and session_storage.exists(ssid):
+            email = session_storage.get(ssid).decode("utf-8")
+            print(f"Email found in session: {email}")
+            request.user = CustomUser.objects.get(email=email)
+        else:
+            print("No valid session found.")
+            request.user = None
+        if request.user and request.user.is_staff and rezume.status != 'dr':
+            serializer = self.serializer_class(rezume, context={'is_fight': True})
+            data = serializer.data
+            data['creator'] = rezume.creator.email
+            if rezume.moderator:
+                data['moderator'] = rezume.moderator.email
+            return Response(data)
+        if rezume.status == 'del' or rezume.creator != request.user:
+            return Response({"detail": "Эта заявка удалена или недоступна для просмотра."}, status=403)
         serializer = self.serializer_class(rezume, context={'is_resume': True})
         data = serializer.data
         data['creator'] = rezume.creator.email
@@ -309,6 +345,14 @@ class RezumeDetail(APIView):
     @swagger_auto_schema(request_body=serializer_class)
     def put_creator(self, request, pk):
         rezume = get_object_or_404(self.model_class, pk=pk)
+        ssid = request.COOKIES.get("session_id")
+        if ssid and session_storage.exists(ssid):
+            email = session_storage.get(ssid).decode("utf-8")
+            print(f"Email found in session: {email}")
+            request.user = CustomUser.objects.get(email=email)
+        else:
+            print("No valid session found.")
+            request.user = None
         user = request.user
 
         if user == rezume.creator:
@@ -432,11 +476,25 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=['put'], permission_classes=[AllowAny])
     def profile(self, request, format=None):
         user = request.user
-        if user is None:
+        if not user.is_authenticated:
             return Response({'error': 'Вы не авторизованы'}, status=status.HTTP_401_UNAUTHORIZED)
-        serializer = self.serializer_class(user, data=request.data, partial=True)
+        old_email = user.email
+        data = request.data
+
+        if 'password' in data and data['password']:
+            user.set_password(data['password'])
+            user.save()
+            del data['password']
+
+        serializer = self.serializer_class(user, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            new_email = serializer.data.get('email')
+            if new_email and old_email != new_email:
+                ssid = request.COOKIES.get("session_id")
+                if ssid:
+                    session_storage.delete(ssid)
+                    session_storage.set(ssid, new_email, ex=settings.SESSION_COOKIE_AGE)
             return Response({'message': 'Профиль обновлен', 'user': serializer.data}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -452,13 +510,13 @@ def login_view(request):
     if user is not None:
         random_key = str(uuid.uuid4())
         session_storage.set(random_key, username)
-        response = HttpResponse("{'status': 'ok'}")
+        response = JsonResponse({"status": "ok", "username": username, "is_staff": user.is_staff})
         response.set_cookie("session_id", random_key)
         return response
         # login(request, user)
         # return HttpResponse("{'status': 'ok'}")
     else:
-        return HttpResponse("{'status': 'error', 'error': 'login failed'}")
+        return JsonResponse({"status": "error", "error": "login failed"})
 def logout_view(request):
     session_id = request.COOKIES.get("session_id")
     if session_id:
@@ -468,3 +526,19 @@ def logout_view(request):
         return response
     else:
         return HttpResponse("{'status': 'error', 'error': 'no session found'}")
+
+@swagger_auto_schema(method='get')
+@api_view(["GET"])
+@csrf_exempt
+def check_session(request):
+    session_id = request.COOKIES.get("session_id")
+    print(session_id)
+    if session_id:
+        username = session_storage.get(session_id)
+        if username:
+            if isinstance(username, bytes):
+                username = username.decode('utf-8')
+            user = CustomUser.objects.get(email=username)
+            return JsonResponse({"status": "ok", "username": username, "is_staff": user.is_staff})
+
+    return JsonResponse({"status": "error", "message": "Invalid session"})

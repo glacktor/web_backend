@@ -81,6 +81,7 @@ class Rezume(models.Model):
         ('r', "Rejected")
     ]
     description = models.CharField(null=True, max_length=255)
+    review = models.CharField(null=True, max_length=255)
     status = models.CharField(choices=STATUS_CHOICES, max_length=9, default='dr')
     created_at = models.DateTimeField(auto_now_add=True)
     formed_at = models.DateTimeField(null=True, blank=True)
